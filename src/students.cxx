@@ -25,10 +25,10 @@ int addStudent(
 ){
     pqxx::work tx(db);
     try {
-        auto result = tx.exec_params(
+        auto result = tx.exec(
             "INSERT INTO students (first_name, last_name, email, enrollment_date) "
             "VALUES ($1, $2, $3, $4) RETURNING student_id",
-            first_name, last_name, email, enrollment_date
+            pqxx::params(first_name, last_name, email, enrollment_date)
         );
         tx.commit();
         return result[0]["student_id"].as<int>();
@@ -45,9 +45,9 @@ bool updateStudentEmail(
 ){
     pqxx::work tx(db);
     try {
-        auto result = tx.exec_params(
+        auto result = tx.exec(
             "UPDATE students SET email = $1 WHERE student_id = $2",
-            new_email, student_id
+            pqxx::params(new_email, student_id)
         );
         tx.commit();
         return result.affected_rows() > 0;
@@ -63,9 +63,9 @@ bool deleteStudent(
 ){
     pqxx::work tx(db);
     try {
-        auto result = tx.exec_params(
+        auto result = tx.exec(
             "DELETE FROM students WHERE student_id = $1",
-            student_id
+            pqxx::params(student_id)
         );
         tx.commit();
         return result.affected_rows() > 0;
