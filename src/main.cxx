@@ -84,6 +84,8 @@ int main() {
         std::cout << "After attempting to update Jane's email with SQL injection:\n";
         std::cout << "-------------------------\n";
         getAllStudents(db);
+
+        std::cout << "\nEnd of program!!\n";
     }
     catch (const std::exception& e) {
         std::cerr << "Database error: " << e.what() << '\n';
